@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.14)
+cmake_minimum_required(VERSION 4.0)
 project(collidingmice_example VERSION 0.0.1 LANGUAGES CXX)
 
 set(CMAKE_AUTOMOC ON)
