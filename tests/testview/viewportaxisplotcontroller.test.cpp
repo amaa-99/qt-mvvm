@@ -66,13 +66,13 @@ TEST_F(ViewportAxisPlotControllerTest, initialState)
     // checking initial defaults
     const double customplot_default_lower(0.0);
     const double customplot_default_upper(5.0);
-    EXPECT_EQ(axis->range().lower, customplot_default_lower);
-    EXPECT_EQ(axis->range().upper, customplot_default_upper);
+    EXPECT_DOUBLE_EQ(axis->range().lower, customplot_default_lower);
+    EXPECT_DOUBLE_EQ(axis->range().upper, customplot_default_upper);
 
     // controller shouldn''t change axis range
     ViewportAxisPlotController controller(axis);
-    EXPECT_EQ(axis->range().lower, customplot_default_lower);
-    EXPECT_EQ(axis->range().upper, customplot_default_upper);
+    EXPECT_DOUBLE_EQ(axis->range().lower, customplot_default_lower);
+    EXPECT_DOUBLE_EQ(axis->range().upper, customplot_default_upper);
 
     // checking axis signaling
     auto xChanged = createSpy(custom_plot->xAxis);
@@ -112,8 +112,8 @@ TEST_F(ViewportAxisPlotControllerTest, setViewportAxisItem)
     // Subscribtion to ViewportAxisItem should change QCPAxis range for X.
     controller.setItem(axisItem);
 
-    EXPECT_EQ(custom_plot->xAxis->range().lower, expected_min);
-    EXPECT_EQ(custom_plot->xAxis->range().upper, expected_max);
+    EXPECT_DOUBLE_EQ(custom_plot->xAxis->range().lower, expected_min);
+    EXPECT_DOUBLE_EQ(custom_plot->xAxis->range().upper, expected_max);
     EXPECT_EQ(xChanged->count(), 1);
     EXPECT_EQ(yChanged->count(), 0);
 
@@ -153,8 +153,8 @@ TEST_F(ViewportAxisPlotControllerTest, changeQCPAxis)
     EXPECT_EQ(yChanged->count(), 0);
 
     // Check changed properties in ViewportAxisItem
-    EXPECT_EQ(axisItem->property<double>(ViewportAxisItem::P_MIN), expected_min);
-    EXPECT_EQ(axisItem->property<double>(ViewportAxisItem::P_MAX), expected_max);
+    EXPECT_DOUBLE_EQ(axisItem->property<double>(ViewportAxisItem::P_MIN), expected_min);
+    EXPECT_DOUBLE_EQ(axisItem->property<double>(ViewportAxisItem::P_MAX), expected_max);
 }
 
 //! Controller subscribed to ViewportAxisItem.
@@ -185,8 +185,8 @@ TEST_F(ViewportAxisPlotControllerTest, changeViewportAxisItem)
     // Checking QCPAxis
     EXPECT_EQ(xChanged->count(), 2);
     EXPECT_EQ(yChanged->count(), 0);
-    EXPECT_EQ(custom_plot->xAxis->range().lower, expected_min);
-    EXPECT_EQ(custom_plot->xAxis->range().upper, expected_max);
+    EXPECT_DOUBLE_EQ(custom_plot->xAxis->range().lower, expected_min);
+    EXPECT_DOUBLE_EQ(custom_plot->xAxis->range().upper, expected_max);
 }
 
 //! Controller subscribed to ViewportAxisItem.
@@ -208,8 +208,8 @@ TEST_F(ViewportAxisPlotControllerTest, changeViewportAxisItemSignaling)
     controller.setItem(axisItem);
 
     // initial condition
-    EXPECT_EQ(custom_plot->xAxis->range().lower, 1.0);
-    EXPECT_EQ(custom_plot->xAxis->range().upper, 2.0);
+    EXPECT_DOUBLE_EQ(custom_plot->xAxis->range().lower, 1.0);
+    EXPECT_DOUBLE_EQ(custom_plot->xAxis->range().upper, 2.0);
 
     auto rangeChanged = createSpy(custom_plot->xAxis);
     auto rangeChanged2 = createSpy2(custom_plot->xAxis);
@@ -221,8 +221,8 @@ TEST_F(ViewportAxisPlotControllerTest, changeViewportAxisItemSignaling)
     // Checking QCPAxis
     EXPECT_EQ(rangeChanged->count(), 1);
     EXPECT_EQ(rangeChanged2->count(), 1);
-    EXPECT_EQ(custom_plot->xAxis->range().lower, 1.0);
-    EXPECT_EQ(custom_plot->xAxis->range().upper, expected_max);
+    EXPECT_DOUBLE_EQ(custom_plot->xAxis->range().lower, 1.0);
+    EXPECT_DOUBLE_EQ(custom_plot->xAxis->range().upper, expected_max);
 
     QList<QVariant> arguments = rangeChanged->takeFirst();
     EXPECT_EQ(arguments.size(), 1);
@@ -269,8 +269,8 @@ TEST_F(ViewportAxisPlotControllerTest, changeViewportAxisItemMapping)
     const double expected_max = 20.0;
     axisItem->setProperty(ViewportAxisItem::P_MAX, expected_max);
 
-    EXPECT_EQ(custom_plot->xAxis->range().lower, 1.0);
-    EXPECT_EQ(custom_plot->xAxis->range().upper, expected_max);
+    EXPECT_DOUBLE_EQ(custom_plot->xAxis->range().lower, 1.0);
+    EXPECT_DOUBLE_EQ(custom_plot->xAxis->range().upper, expected_max);
 }
 
 //! Set ViewportAxisItem logz, subscribe controller and check that QCPAxis has it.
@@ -348,8 +348,8 @@ TEST_F(ViewportAxisPlotControllerTest, changeViewportAxisItemYCase)
     // Checking QCPAxis
     EXPECT_EQ(xChanged->count(), 0);
     EXPECT_EQ(yChanged->count(), 2);
-    EXPECT_EQ(custom_plot->yAxis->range().lower, expected_min);
-    EXPECT_EQ(custom_plot->yAxis->range().upper, expected_max);
+    EXPECT_DOUBLE_EQ(custom_plot->yAxis->range().lower, expected_min);
+    EXPECT_DOUBLE_EQ(custom_plot->yAxis->range().upper, expected_max);
 }
 
 //! Model with two AxisItem's. Controller first is subscribed to one item, then to another.
@@ -375,10 +375,8 @@ TEST_F(ViewportAxisPlotControllerTest, oneControllerTwoAxisItems)
     auto yChanged = createSpy(custom_plot->yAxis);
 
     // initial axis status
-    EXPECT_EQ(axis_item0->property<double>(ViewportAxisItem::P_MIN),
-              custom_plot->xAxis->range().lower);
-    EXPECT_EQ(axis_item0->property<double>(ViewportAxisItem::P_MAX),
-              custom_plot->xAxis->range().upper);
+    EXPECT_DOUBLE_EQ(axis_item0->property<double>(ViewportAxisItem::P_MIN), custom_plot->xAxis->range().lower);
+    EXPECT_DOUBLE_EQ(axis_item0->property<double>(ViewportAxisItem::P_MAX), custom_plot->xAxis->range().upper);
 
     // switching to second axis
     controller->setItem(axis_item1);
@@ -386,10 +384,8 @@ TEST_F(ViewportAxisPlotControllerTest, oneControllerTwoAxisItems)
     EXPECT_EQ(xChanged->count(), 1);
     EXPECT_EQ(yChanged->count(), 0);
 
-    EXPECT_EQ(axis_item1->property<double>(ViewportAxisItem::P_MIN),
-              custom_plot->xAxis->range().lower);
-    EXPECT_EQ(axis_item1->property<double>(ViewportAxisItem::P_MAX),
-              custom_plot->xAxis->range().upper);
+    EXPECT_DOUBLE_EQ(axis_item1->property<double>(ViewportAxisItem::P_MIN), custom_plot->xAxis->range().lower);
+    EXPECT_DOUBLE_EQ(axis_item1->property<double>(ViewportAxisItem::P_MAX), custom_plot->xAxis->range().upper);
 
     // changing QCPAxis
     const double expected_min = 100.0;
@@ -397,12 +393,12 @@ TEST_F(ViewportAxisPlotControllerTest, oneControllerTwoAxisItems)
     custom_plot->xAxis->setRange(expected_min, expected_max);
 
     // previous axis should still have original values
-    EXPECT_EQ(axis_item0->property<double>(ViewportAxisItem::P_MIN), 1.0);
-    EXPECT_EQ(axis_item0->property<double>(ViewportAxisItem::P_MAX), 2.0);
+    EXPECT_DOUBLE_EQ(axis_item0->property<double>(ViewportAxisItem::P_MIN), 1.0);
+    EXPECT_DOUBLE_EQ(axis_item0->property<double>(ViewportAxisItem::P_MAX), 2.0);
 
     // second axis should get values from QCPAxis
-    EXPECT_EQ(axis_item1->property<double>(ViewportAxisItem::P_MIN), expected_min);
-    EXPECT_EQ(axis_item1->property<double>(ViewportAxisItem::P_MAX), expected_max);
+    EXPECT_DOUBLE_EQ(axis_item1->property<double>(ViewportAxisItem::P_MIN), expected_min);
+    EXPECT_DOUBLE_EQ(axis_item1->property<double>(ViewportAxisItem::P_MAX), expected_max);
 
     // removing axes from the model
     model.removeItem(model.rootItem(), {"", 0});
