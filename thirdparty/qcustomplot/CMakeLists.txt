@@ -1,6 +1,10 @@
 ############################################################################
 # CMakeLists.txt file for building qcustomplot static library
 ############################################################################
+
+cmake_minimum_required(VERSION 3.15)
+
+project(qcustomplot LANGUAGES CXX)
 set(library_name qcustomplot)
 
 if(NOT DEFINED CMAKE_CXX_STANDARD OR CMAKE_CXX_STANDARD STREQUAL "")
