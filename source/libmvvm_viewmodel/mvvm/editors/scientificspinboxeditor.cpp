@@ -8,9 +8,13 @@
 // ************************************************************************** //
 
 #include "mvvm/editors/scientificspinboxeditor.h"
+#include "mvvm/editors/customeditor.h"
 #include "mvvm/editors/scientificspinbox.h"
 #include "mvvm/utils/numericutils.h"
+#include <QMetaType>
 #include <QVBoxLayout>
+#include <QWidget>
+#include <Qt>
 #include <stdexcept>
 
 using namespace ModelView;
@@ -76,4 +80,6 @@ void ScientificSpinBoxEditor::update_components()
         throw std::runtime_error(
             "ScientificSpinBoxEditor::UpdateComponents() -> Error. Wrong variant type");
     }
+    
+    m_doubleEditor->setValue(m_data.value<double>());
 }
