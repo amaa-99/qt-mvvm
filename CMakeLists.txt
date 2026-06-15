@@ -10,7 +10,6 @@ option(MVVM_DISCOVER_TESTS "Auto discover tests and add to ctest, otherwise will
 option(MVVM_ENABLE_FILESYSTEM "Enable <filesystem> (requires modern compiler), otherwise rely on Qt" ON)
 option(MVVM_BUILD_EXAMPLES "Build user examples" ON)
 option(MVVM_SETUP_CLANGFORMAT "Setups target to beautify the code with 'make clangformat'" OFF)
-option(MVVM_SETUP_CODECOVERAGE "Setups target to generate coverage information with 'make coverage'" OFF)
 option(MVVM_ENABLE_EXTRA_COMPILER_WARNINGS "Enable additional compiler warnings (e.g. for code quality reviewing)" OFF)
 
 find_program(NINJA_PROGRAM ninja)
@@ -83,6 +82,13 @@ if(MSVC)
     
 else()
 
+    # https://gcovr.com/en/stable/cookbook.html#oos-cmake
+    # https://gcc.gnu.org/onlinedocs/gcc/Instrumentation-Options.html
+    
+    # These flags are used if cmake is called with -DCMAKE_BUILD_TYPE=PROFILE:
+    set(CMAKE_C_FLAGS_PROFILE "--coverage")
+    set(CMAKE_CXX_FLAGS_PROFILE "--coverage")
+    
     # Warning level:
     # https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html
 
@@ -142,5 +148,5 @@ endif(BUILD_TESTING)
 include(installation)
 add_subdirectory(examples)
 
-# Defines 'codecoverage', 'clangformat' targets. See CodeTools.cmake for details.
+# Defines 'clangformat' targets. See CodeTools.cmake for details.
 project_codetools_setup()
